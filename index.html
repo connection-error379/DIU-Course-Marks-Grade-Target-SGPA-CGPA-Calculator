@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIU Grade, SGPA & CGPA Calculator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Hind Siliguri', sans-serif;
+        }
+        /* Glassmorphism utility */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+        }
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.85);
+            border: 1px solid rgba(51, 65, 85, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-200">
+    <!-- Header -->
+    <header class="w-full bg-indigo-700 dark:bg-indigo-900 text-white shadow-lg py-5 px-4 sm:px-8">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2.5 bg-white/10 rounded-xl">
+                    <i data-lucide="calculator" class="w-7 h-7 text-indigo-200"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight">DIU Grade & CGPA Calculator</h1>
+                    <p class="text-xs sm:text-sm text-indigo-200">Daffodil International University (Effective Summer 2007)</p>
+                </div>
+            </div>
+            <button id="reset-btn" class="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-sm font-medium transition active:scale-95 shadow">
+                <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                <span>রিসেট (Reset)</span>
+            </button>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="max-w-5xl mx-auto mt-6 flex border-b border-indigo-500/40 gap-2">
+            <button id="tab-course" class="px-4 py-2.5 font-bold text-sm border-b-2 border-white text-white flex items-center gap-2 transition bg-white/10 rounded-t-lg">
+                <i data-lucide="target" class="w-4 h-4"></i>
+                কোর্স মার্ক্স ও টার্গেট ক্যালকুলেটর
+            </button>
+            <button id="tab-cgpa" class="px-4 py-2.5 font-semibold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition">
+                <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+                সেমিস্টার ও কিউমুলেটিভ CGPA ক্যালকুলেটর
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto px-4 py-8">
+        
+        <!-- SECTION 1: COURSE MARKS & TARGET CALCULATOR -->
+        <div id="section-course" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Input Section (Left 7 Cols) -->
+            <section class="lg:col-span-7 space-y-6">
+                <!-- Course Marks Input Form -->
+                <div class="glass-card p-6 rounded-2xl shadow-sm">
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                        <i data-lucide="edit-3" class="w-5 h-5 text-indigo-600"></i>
+                        কোর্স মার্ক্স ইনপুট দিন
+                    </h2>
+                    
+                    <form id="marks-form" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Quiz (15) -->
+                        <div class="p-3.5 bg-slate-100/60 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700">
+                            <label for="quiz" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                কুইজ / Quiz <span class="text-xs text-slate-400 font-normal">(Max 15)</span>
+                            </label>
+                            <div class="relative">
+                                <input type="number" id="quiz" min="0" max="15" step="0.5" placeholder="0 - 15"
+                                    class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-base font-semibold">
+                                <span class="absolute right-3 top-2.5 text-xs font-medium text-slate-400">/ 15</span>
+                            </div>
+                        </div>
+
+                        <!-- Assignment (5) -->
+                        <div class="p-3.5 bg-slate-100/60 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700">
+                            <label for="assignment" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                অ্যাসাইনমেন্ট / Assignment <span class="text-xs text-slate-400 font-normal">(Max 5)</span>
+                            </label>
+                            <div class="relative">
+                                <input type="number" id="assignment" min="0" max="5" step="0.5" placeholder="0 - 5"
+                                    class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-base font-semibold">
+                                <span class="absolute right-3 top-2.5 text-xs font-medium text-slate-400">/ 5</span>
+                            </div>
+                        </div>
+
+                        <!-- Presentation (8) -->
+                        <div class="p-3.5 bg-slate-100/60 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700">
+                            <label for="presentation" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                প্রেজেন্টেশন / Presentation <span class="text-xs text-slate-400 font-normal">(Max 8)</span>
+                            </label>
+                            <div class="relative">
+                                <input type="number" id="presentation" min="0" max="8" step="0.5" placeholder="0 - 8"
+                                    class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-base font-semibold">
+                                <span class="absolute right-3 top-2.5 text-xs font-medium text-slate-400">/ 8</span>
+                            </div>
+                        </div>
+
+                        <!-- Attendance (7) -->
+                        <div class="p-3.5 bg-slate-100/60 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700">
+                            <label for="attendance" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                এটেন্ডেন্স / Attendance <span class="text-xs text-slate-400 font-normal">(Max 7)</span>
+                            </label>
+                            <div class="relative">
+                                <input type="number" id="attendance" min="0" max="7" step="0.5" placeholder="0 - 7"
+                                    class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-base font-semibold">
+                                <span class="absolute right-3 top-2.5 text-xs font-medium text-slate-400">/ 7</span>
+                            </div>
+                        </div>
+
+                        <!-- Midterm (25) -->
+                        <div class="p-3.5 bg-slate-100/60 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700">
+                            <label for="midterm" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                মিডটার্ম / Midterm <span class="text-xs text-slate-400 font-normal">(Max 25)</span>
+                            </label>
+                            <div class="relative">
+                                <input type="number" id="midterm" min="0" max="25" step="0.5" placeholder="0 - 25"
+                                    class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-base font-semibold">
+                                <span class="absolute right-3 top-2.5 text-xs font-medium text-slate-400">/ 25</span>
+                            </div>
+                        </div>
+
+                        <!-- Final (40) -->
+                        <div class="p-3.5 bg-slate-100/60 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700">
+                            <label for="final" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                ফাইনাল এক্সাম / Final Exam <span class="text-xs text-slate-400 font-normal">(Max 40)</span>
+                            </label>
+                            <div class="relative">
+                                <input type="number" id="final" min="0" max="40" step="0.5" placeholder="0 - 40"
+                                    class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-base font-semibold">
+                                <span class="absolute right-3 top-2.5 text-xs font-medium text-slate-400">/ 40</span>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Information Note -->
+                    <p class="mt-4 text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                        <i data-lucide="info" class="w-4 h-4 text-slate-400 shrink-0"></i>
+                        যেসব মার্ক্স এখনো পাননি বা পরীক্ষা হয়নি, সেগুলো খালি (Empty) রাখতে পারেন।
+                    </p>
+                </div>
+
+                <!-- DIU Grading Scale Summary -->
+                <div class="glass-card p-5 rounded-2xl shadow-sm">
+                    <h3 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">DIU Official Grading Scale (Effective Summer 2007)</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
+                        <div class="p-2 bg-emerald-50 dark:bg-emerald-950/40 rounded-lg border border-emerald-200 dark:border-emerald-800 text-center">
+                            <span class="font-bold text-emerald-700 dark:text-emerald-300 block">80–100 (A+)</span>
+                            <span class="text-[10px] text-slate-500 font-semibold block">4.00 • Outstanding</span>
+                        </div>
+                        <div class="p-2 bg-blue-50 dark:bg-blue-950/40 rounded-lg border border-blue-200 dark:border-blue-800 text-center">
+                            <span class="font-bold text-blue-700 dark:text-blue-300 block">75–79 (A)</span>
+                            <span class="text-[10px] text-slate-500 font-semibold block">3.75 • Excellent</span>
+                        </div>
+                        <div class="p-2 bg-cyan-50 dark:bg-cyan-950/40 rounded-lg border border-cyan-200 dark:border-cyan-800 text-center">
+                            <span class="font-bold text-cyan-700 dark:text-cyan-300 block">70–74 (A-)</span>
+                            <span class="text-[10px] text-slate-500 font-semibold block">3.50 • Very Good</span>
+                        </div>
+                        <div class="p-2 bg-indigo-50 dark:bg-indigo-950/40 rounded-lg border border-indigo-200 dark:border-indigo-800 text-center">
+                            <span class="font-bold text-indigo-700 dark:text-indigo-300 block">65–69 (B+)</span>
+                            <span class="text-[10px] text-slate-500 font-semibold block">3.25 • Good</span>
+                        </div>
+                        <div class="p-2 bg-purple-50 dark:bg-purple-950/40 rounded-lg border border-purple-200 dark:border-purple-800 text-center">
+                            <span class="font-bold text-purple-700 dark:text-purple-300 block">60–64 (B)</span>
+                            <span class="text-[10px] text-slate-500 font-semibold block">3.00 • Satisfactory</span>
+                        </div>
+                        <div class="p-2 bg-amber-50 dark:bg-amber-950/40 rounded-lg border border-amber-200 dark:border-amber-800 text-center">
+                            <span class="font-bold text-amber-700 dark:text-amber-300 block">55–59 (B-)</span>
+                            <span class="text-[10px] text-slate-500 font-semibold block">2.75 • Above Avg</span>
+                        </div>
+                        <div class="p-2 bg-orange-50 dark:bg-orange-950/40 rounded-lg border border-orange-200 dark:border-orange-800 text-center">
+                            <span class="font-bold text-orange-700 dark:text-orange-300 block">50–54 (C+)</span>
+                            <span class="text-[10px] text-slate-500 font-semibold block">2.50 • Average</span>
+                        </div>
+                        <div class="p-2 bg-orange-100 dark:bg-orange-950/60 rounded-lg border border-orange-300 dark:border-orange-700 text-center">
+                            <span class="font-bold text-orange-800 dark:text-orange-200 block">45–49 (C)</span>
+                            <span class="text-[10px] text-slate-500 font-semibold block">2.25 • Below Avg</span>
+                        </div>
+                        <div class="p-2 bg-red-50 dark:bg-red-950/40 rounded-lg border border-red-200 dark:border-red-800 text-center">
+                            <span class="font-bold text-red-700 dark:text-red-300 block">40–44 (D)</span>
+                            <span class="text-[10px] text-slate-500 font-semibold block">2.00 • Pass</span>
+                        </div>
+                        <div class="p-2 bg-slate-200 dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-700 text-center">
+                            <span class="font-bold text-slate-700 dark:text-slate-300 block">00–39 (F)</span>
+                            <span class="text-[10px] text-slate-500 font-semibold block">0.00 • Fail</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results & Target Analysis (Right 5 Cols) -->
+            <section class="lg:col-span-5 space-y-6">
+                
+                <!-- Current Status Card -->
+                <div class="glass-card p-6 rounded-2xl shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h2 class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                                বর্তমান মার্ক্স (Obtained Marks)
+                            </h2>
+                            <div class="flex items-baseline gap-2 mt-1">
+                                <span id="obtained-marks" class="text-4xl font-extrabold text-slate-900 dark:text-white">0</span>
+                                <span class="text-slate-500 text-sm font-medium">/ <span id="evaluated-max">0</span></span>
+                            </div>
+                        </div>
+                        <!-- Grade Badge -->
+                        <div class="text-right">
+                            <span id="grade-badge" class="inline-block px-3 py-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-lg font-bold rounded-lg shadow-sm">
+                                -
+                            </span>
+                            <div id="cgpa-text" class="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-1">
+                                GPA: 0.00
+                            </div>
+                            <div id="remark-text" class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400">
+                                -
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-3 mb-2 overflow-hidden">
+                        <div id="progress-bar" class="bg-indigo-600 h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-slate-500">
+                        <span>প্রগ্রেস: <span id="progress-percent">0</span>%</span>
+                        <span id="selected-target-label">টার্গেট: A+ (80%)</span>
+                    </div>
+                </div>
+
+                <!-- Target Grade Selector & Detailed Card -->
+                <div class="glass-card p-6 rounded-2xl shadow-sm border-2 border-indigo-100 dark:border-indigo-900">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <div class="p-2 bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-lg">
+                                <i data-lucide="trophy" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-slate-900 dark:text-white">টার্গেট গ্রেড সিলেক্টর</h3>
+                                <p class="text-xs text-slate-500">কাঙ্ক্ষিত গ্রেড নির্বাচন করুন</p>
+                            </div>
+                        </div>
+                        <!-- Dropdown for Target Selection -->
+                        <select id="target-grade-select" class="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-950 border border-indigo-200 dark:border-indigo-800 rounded-lg font-bold text-indigo-700 dark:text-indigo-300 text-sm outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer">
+                            <option value="80">A+ (4.00) Outstanding</option>
+                            <option value="75">A (3.75) Excellent</option>
+                            <option value="70">A- (3.50) Very Good</option>
+                            <option value="65">B+ (3.25) Good</option>
+                            <option value="60">B (3.00) Satisfactory</option>
+                            <option value="55">B- (2.75) Above Avg</option>
+                            <option value="40">D (2.00) Pass</option>
+                        </select>
+                    </div>
+
+                    <!-- Stat Details -->
+                    <div class="space-y-3 mb-5">
+                        <div class="flex justify-between items-center text-sm p-2.5 bg-slate-100/70 dark:bg-slate-800/60 rounded-xl">
+                            <span id="target-marks-needed-label" class="text-slate-600 dark:text-slate-300">টার্গেট অর্জনে বাকি মার্ক্স:</span>
+                            <span id="marks-needed-total" class="font-bold text-indigo-600 dark:text-indigo-400 text-base">80</span>
+                        </div>
+
+                        <div class="flex justify-between items-center text-sm p-2.5 bg-slate-100/70 dark:bg-slate-800/60 rounded-xl">
+                            <span class="text-slate-600 dark:text-slate-300">অবশিষ্ট পরীক্ষা (Unentered):</span>
+                            <span id="remaining-available-marks" class="font-bold text-slate-800 dark:text-slate-200">100</span>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Requirement Message Box -->
+                    <div id="target-status-box" class="p-4 rounded-xl border bg-indigo-50 dark:bg-indigo-950/40 border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-200 text-sm leading-relaxed">
+                        <div class="flex items-start gap-2.5">
+                            <i id="target-status-icon" data-lucide="target" class="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5"></i>
+                            <div id="target-status-text">
+                                মার্ক্স ইনপুট দেওয়া শুরু করুন। আপনার টার্গেট অনুযায়ী হিসাব দেখতে পাবেন।
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- All Grades Target Breakdown Matrix Table -->
+                <div class="glass-card p-5 rounded-2xl shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">সকল গ্রেডের বিস্তারিত ব্রেকডাউন</h4>
+                        <span class="text-[10px] bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded text-slate-600 dark:text-slate-300 font-semibold">DIU Scale</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 dark:border-slate-700 text-slate-400 font-medium">
+                                    <th class="pb-2">গ্রেড (GPA / Remark)</th>
+                                    <th class="pb-2">রেঞ্জ</th>
+                                    <th class="pb-2">প্রয়োজনীয় মার্ক্স</th>
+                                    <th class="pb-2 text-right">স্ট্যাটাস</th>
+                                </tr>
+                            </thead>
+                            <tbody id="all-grades-matrix" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+                                <!-- Populated dynamically via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- SECTION 2: MULTI-COURSE SGPA & CGPA CALCULATOR -->
+        <div id="section-cgpa" class="hidden grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Course Entry Table Section (Left 8 Cols) -->
+            <section class="lg:col-span-8 space-y-6">
+                <!-- Course Input List -->
+                <div class="glass-card p-6 rounded-2xl shadow-sm">
+                    <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-200 dark:border-slate-700">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i data-lucide="book-open" class="w-5 h-5 text-indigo-600"></i>
+                                চলতি সেমিস্টারের কোর্সসমূহ
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-0.5">প্রতিটি কোর্সের ক্রেডিট এবং অর্জিত লেটার গ্রেড বা পয়েন্ট নির্বাচন করুন</p>
+                        </div>
+                        <button id="add-course-btn" class="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold shadow transition">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            কোর্স যোগ করুন
+                        </button>
+                    </div>
+
+                    <div id="course-rows-container" class="space-y-3">
+                        <!-- Dynamic Course Input Rows -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- CGPA Results Summary (Right 4 Cols) -->
+            <section class="lg:col-span-4 space-y-6">
+                <!-- Semester GPA Summary Box -->
+                <div class="glass-card p-6 rounded-2xl shadow-sm relative overflow-hidden border-2 border-indigo-200 dark:border-indigo-800">
+                    <h4 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">সেমিস্টার ফল (SGPA)</h4>
+                    <div class="flex items-baseline gap-2 mb-4">
+                        <span id="semester-gpa-val" class="text-5xl font-extrabold text-indigo-600 dark:text-indigo-400">0.00</span>
+                        <span class="text-slate-400 font-semibold text-sm">/ 4.00</span>
+                    </div>
+
+                    <div class="space-y-2 border-t border-slate-200 dark:border-slate-700 pt-3 text-xs text-slate-600 dark:text-slate-300">
+                        <div class="flex justify-between">
+                            <span>মোট সেমিস্টার ক্রেডিট:</span>
+                            <span id="sem-total-credits" class="font-bold">0.0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>মোট সেমিস্টার গ্রেড পয়েন্ট:</span>
+                            <span id="sem-total-points" class="font-bold">0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cumulative CGPA Calculator Card -->
+                <div class="glass-card p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
+                    <h4 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <i data-lucide="layers" class="w-4 h-4 text-indigo-600"></i>
+                        সার্বিক পয়েন্ট (Cumulative CGPA)
+                    </h4>
+                    
+                    <div class="space-y-3 text-xs mb-4">
+                        <div>
+                            <label for="prev-credits" class="block font-medium text-slate-600 dark:text-slate-300 mb-1">পূর্বের সম্পন্ন করা মোট ক্রেডিট</label>
+                            <input type="number" id="prev-credits" min="0" step="0.5" placeholder="যেমন: 45"
+                                class="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 font-semibold">
+                        </div>
+                        <div>
+                            <label for="prev-cgpa" class="block font-medium text-slate-600 dark:text-slate-300 mb-1">পূর্বের অর্জিত CGPA</label>
+                            <input type="number" id="prev-cgpa" min="0" max="4" step="0.01" placeholder="যেমন: 3.50"
+                                class="w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 font-semibold">
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-indigo-50 dark:bg-indigo-950/60 rounded-xl border border-indigo-200 dark:border-indigo-800">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-slate-700 dark:text-slate-200">সর্বমোট CGPA:</span>
+                            <span id="cgpa-total-val" class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400">0.00</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex justify-between">
+                            <span>সর্বমোট ক্রেডিট: <strong id="cum-total-credits" class="text-slate-700 dark:text-slate-300">0.0</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Grading Scale Reference -->
+                <div class="glass-card p-4 rounded-2xl shadow-sm text-xs">
+                    <h4 class="font-bold text-slate-700 dark:text-slate-300 mb-2">DIU Grading Points:</h4>
+                    <div class="grid grid-cols-2 gap-1.5 text-slate-500 dark:text-slate-400">
+                        <span>A+ : 4.00 (80-100)</span>
+                        <span>A  : 3.75 (75-79)</span>
+                        <span>A- : 3.50 (70-74)</span>
+                        <span>B+ : 3.25 (65-69)</span>
+                        <span>B  : 3.00 (60-64)</span>
+                        <span>B- : 2.75 (55-59)</span>
+                        <span>C+ : 2.50 (50-54)</span>
+                        <span>C  : 2.25 (45-49)</span>
+                        <span>D  : 2.00 (40-44)</span>
+                        <span>F  : 0.00 (00-39)</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-5xl mx-auto px-4 py-6 text-center text-xs text-slate-400">
+        <p>DIU Marks & Grade Target Calculator • Effective Summer Semester 2007</p>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // Icons Initialization
+        lucide.createIcons();
+
+        // Navigation Tabs Setup
+        const tabCourseBtn = document.getElementById('tab-course');
+        const tabCgpaBtn = document.getElementById('tab-cgpa');
+        const sectionCourse = document.getElementById('section-course');
+        const sectionCgpa = document.getElementById('section-cgpa');
+
+        tabCourseBtn.addEventListener('click', () => {
+            tabCourseBtn.className = "px-4 py-2.5 font-bold text-sm border-b-2 border-white text-white flex items-center gap-2 transition bg-white/10 rounded-t-lg";
+            tabCgpaBtn.className = "px-4 py-2.5 font-semibold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition";
+            
+            sectionCourse.classList.remove('hidden');
+            sectionCourse.classList.add('grid');
+            
+            sectionCgpa.classList.add('hidden');
+            sectionCgpa.classList.remove('grid');
+        });
+
+        tabCgpaBtn.addEventListener('click', () => {
+            tabCgpaBtn.className = "px-4 py-2.5 font-bold text-sm border-b-2 border-white text-white flex items-center gap-2 transition bg-white/10 rounded-t-lg";
+            tabCourseBtn.className = "px-4 py-2.5 font-semibold text-sm border-b-2 border-transparent text-indigo-200 hover:text-white flex items-center gap-2 transition";
+            
+            sectionCgpa.classList.remove('hidden');
+            sectionCgpa.classList.add('grid');
+            
+            sectionCourse.classList.add('hidden');
+            sectionCourse.classList.remove('grid');
+        });
+
+        // DIU Official Grade scale definition (Effective Summer Semester 2007)
+        const gradeTargets = [
+            { grade: 'A+', min: 80, max: 100, gpa: '4.00', remark: 'Outstanding', color: 'text-emerald-600 dark:text-emerald-400' },
+            { grade: 'A', min: 75, max: 79, gpa: '3.75', remark: 'Excellent', color: 'text-blue-600 dark:text-blue-400' },
+            { grade: 'A-', min: 70, max: 74, gpa: '3.50', remark: 'Very Good', color: 'text-cyan-600 dark:text-cyan-400' },
+            { grade: 'B+', min: 65, max: 69, gpa: '3.25', remark: 'Good', color: 'text-indigo-600 dark:text-indigo-400' },
+            { grade: 'B', min: 60, max: 64, gpa: '3.00', remark: 'Satisfactory', color: 'text-purple-600 dark:text-purple-400' },
+            { grade: 'B-', min: 55, max: 59, gpa: '2.75', remark: 'Above Average', color: 'text-amber-600 dark:text-amber-400' },
+            { grade: 'C+', min: 50, max: 54, gpa: '2.50', remark: 'Average', color: 'text-orange-600 dark:text-orange-400' },
+            { grade: 'C', min: 45, max: 49, gpa: '2.25', remark: 'Below Average', color: 'text-orange-700 dark:text-orange-500' },
+            { grade: 'D', min: 40, max: 44, gpa: '2.00', remark: 'Pass', color: 'text-red-500 dark:text-red-400' }
+        ];
+
+        // Fields metadata based on DIU system
+        const fields = [
+            { id: 'quiz', max: 15, name: 'কুইজ (Quiz)' },
+            { id: 'assignment', max: 5, name: 'অ্যাসাইনমেন্ট (Assignment)' },
+            { id: 'presentation', max: 8, name: 'প্রেজেন্টেশন (Presentation)' },
+            { id: 'attendance', max: 7, name: 'এটেন্ডেন্স (Attendance)' },
+            { id: 'midterm', max: 25, name: 'মিডটার্ম (Midterm)' },
+            { id: 'final', max: 40, name: 'ফাইনাল (Final Exam)' }
+        ];
+
+        const form = document.getElementById('marks-form');
+        const resetBtn = document.getElementById('reset-btn');
+        const targetGradeSelect = document.getElementById('target-grade-select');
+
+        // Results elements
+        const obtainedMarksEl = document.getElementById('obtained-marks');
+        const evaluatedMaxEl = document.getElementById('evaluated-max');
+        const gradeBadgeEl = document.getElementById('grade-badge');
+        const cgpaTextEl = document.getElementById('cgpa-text');
+        const remarkTextEl = document.getElementById('remark-text');
+        const progressBarEl = document.getElementById('progress-bar');
+        const progressPercentEl = document.getElementById('progress-percent');
+        const selectedTargetLabelEl = document.getElementById('selected-target-label');
+        const targetMarksNeededLabelEl = document.getElementById('target-marks-needed-label');
+        const marksNeededTotalEl = document.getElementById('marks-needed-total');
+        const remainingAvailableMarksEl = document.getElementById('remaining-available-marks');
+        const targetStatusBoxEl = document.getElementById('target-status-box');
+        const targetStatusTextEl = document.getElementById('target-status-text');
+        const allGradesMatrixEl = document.getElementById('all-grades-matrix');
+
+        // Helper to validate & get numeric value
+        function getValue(id, max) {
+            const input = document.getElementById(id);
+            let val = parseFloat(input.value);
+
+            if (isNaN(val)) return null;
+
+            if (val < 0) {
+                val = 0;
+                input.value = 0;
+            } else if (val > max) {
+                val = max;
+                input.value = max;
+            }
+
+            return val;
+        }
+
+        // DIU Grade Lookup (Effective Summer Semester 2007)
+        function getGradeInfo(totalMarks) {
+            if (totalMarks >= 80) return { grade: 'A+', cgpa: '4.00', remark: 'Outstanding', color: 'bg-emerald-500 text-white' };
+            if (totalMarks >= 75) return { grade: 'A', cgpa: '3.75', remark: 'Excellent', color: 'bg-blue-500 text-white' };
+            if (totalMarks >= 70) return { grade: 'A-', cgpa: '3.50', remark: 'Very Good', color: 'bg-cyan-500 text-white' };
+            if (totalMarks >= 65) return { grade: 'B+', cgpa: '3.25', remark: 'Good', color: 'bg-indigo-500 text-white' };
+            if (totalMarks >= 60) return { grade: 'B', cgpa: '3.00', remark: 'Satisfactory', color: 'bg-purple-500 text-white' };
+            if (totalMarks >= 55) return { grade: 'B-', cgpa: '2.75', remark: 'Above Average', color: 'bg-amber-500 text-white' };
+            if (totalMarks >= 50) return { grade: 'C+', cgpa: '2.50', remark: 'Average', color: 'bg-orange-500 text-white' };
+            if (totalMarks >= 45) return { grade: 'C', cgpa: '2.25', remark: 'Below Average', color: 'bg-orange-600 text-white' };
+            if (totalMarks >= 40) return { grade: 'D', cgpa: '2.00', remark: 'Pass', color: 'bg-red-500 text-white' };
+            return { grade: 'F', cgpa: '0.00', remark: 'Fail', color: 'bg-red-700 text-white' };
+        }
+
+        // Render All Grades Target Matrix
+        function renderGradeMatrix(totalObtained, remainingMaxPossible) {
+            allGradesMatrixEl.innerHTML = gradeTargets.map(item => {
+                const needed = Math.max(0, item.min - totalObtained);
+                let statusBadge = '';
+
+                if (totalObtained >= item.min) {
+                    statusBadge = `<span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold">অর্জিত ✓</span>`;
+                } else if (totalObtained + remainingMaxPossible < item.min) {
+                    statusBadge = `<span class="text-[10px] px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 font-semibold">অসম্ভব ✕</span>`;
+                } else {
+                    const reqPct = remainingMaxPossible > 0 ? ((needed / remainingMaxPossible) * 100).toFixed(0) : 0;
+                    statusBadge = `<span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-semibold">${needed.toFixed(1)} (বাকি ${reqPct}%)</span>`;
+                }
+
+                return `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                        <td class="py-2 ${item.color} font-bold">${item.grade} <span class="text-slate-400 text-[10px] font-normal">(${item.gpa} • ${item.remark})</span></td>
+                        <td class="py-2 text-slate-500">${item.min}–${item.max}</td>
+                        <td class="py-2 font-semibold text-slate-700 dark:text-slate-300">${needed > 0 ? needed.toFixed(1) + ' মার্ক্স' : '০ (অর্জিত)'}</td>
+                        <td class="py-2 text-right">${statusBadge}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Main Calculation Logic
+        function calculate() {
+            let totalObtained = 0;
+            let totalEvaluatedMax = 0;
+            let remainingMaxPossible = 0;
+            let unenteredFields = [];
+
+            fields.forEach(field => {
+                const val = getValue(field.id, field.max);
+                if (val !== null) {
+                    totalObtained += val;
+                    totalEvaluatedMax += field.max;
+                } else {
+                    remainingMaxPossible += field.max;
+                    unenteredFields.push(field);
+                }
+            });
+
+            // Target Grade selected
+            const targetMinMarks = parseFloat(targetGradeSelect.value);
+            const targetObj = gradeTargets.find(g => g.min === targetMinMarks) || gradeTargets[0];
+
+            // Update UI - Scores
+            obtainedMarksEl.textContent = totalObtained.toFixed(1).replace(/\.0$/, '');
+            evaluatedMaxEl.textContent = totalEvaluatedMax;
+
+            // Update UI - Grade, CGPA, Remark
+            const gradeInfo = getGradeInfo(totalObtained);
+            gradeBadgeEl.textContent = gradeInfo.grade;
+            gradeBadgeEl.className = `inline-block px-3 py-1 text-lg font-bold rounded-lg shadow-sm ${gradeInfo.color}`;
+            cgpaTextEl.textContent = `GPA: ${gradeInfo.cgpa}`;
+            remarkTextEl.textContent = gradeInfo.remark;
+
+            // Progress Bar based on selected target
+            const percent = Math.min(100, Math.round((totalObtained / targetMinMarks) * 100));
+            progressBarEl.style.width = `${percent}%`;
+            progressPercentEl.textContent = percent;
+            selectedTargetLabelEl.textContent = `টার্গেট: ${targetObj.grade} (${targetMinMarks}%)`;
+
+            // Selected Target Analysis
+            const neededForTarget = Math.max(0, targetMinMarks - totalObtained);
+            targetMarksNeededLabelEl.textContent = `${targetObj.grade} (${targetObj.remark}) পেতে বাকি:`;
+            marksNeededTotalEl.textContent = neededForTarget.toFixed(1).replace(/\.0$/, '');
+            remainingAvailableMarksEl.textContent = remainingMaxPossible;
+
+            // Target Status Logic
+            updateTargetStatus(totalObtained, neededForTarget, remainingMaxPossible, unenteredFields, targetObj);
+
+            // Render All Grades Summary Matrix
+            renderGradeMatrix(totalObtained, remainingMaxPossible);
+        }
+
+        function updateTargetStatus(obtained, needed, remainingAvailable, unenteredFields, targetObj) {
+            // Case 1: Already Achieved Selected Target
+            if (obtained >= targetObj.min) {
+                targetStatusBoxEl.className = "p-4 rounded-xl border bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200 text-sm leading-relaxed";
+                targetStatusTextEl.innerHTML = `
+                    <span class="font-bold block text-base mb-1">🎉 অভিনন্দন! (Congratulations!)</span>
+                    আপনি ইতিমধ্যেই <strong>${obtained.toFixed(1)}</strong> মার্ক্স অর্জনের মাধ্যমে <strong>${targetObj.grade} (${targetObj.remark} - GPA ${targetObj.gpa})</strong> অর্জন করেছেন!
+                `;
+                return;
+            }
+
+            // Case 2: Impossible to reach target
+            if (obtained + remainingAvailable < targetObj.min) {
+                const maxPossible = obtained + remainingAvailable;
+                targetStatusBoxEl.className = "p-4 rounded-xl border bg-red-50 dark:bg-red-950/40 border-red-300 dark:border-red-800 text-red-900 dark:text-red-200 text-sm leading-relaxed";
+                targetStatusTextEl.innerHTML = `
+                    <span class="font-bold block text-base mb-1">⚠️ ${targetObj.grade} (${targetObj.remark}) আর সম্ভব নয়</span>
+                    অবশিষ্ট সব পরীক্ষায় পূর্ণ মার্ক্স (<strong>${remainingAvailable}</strong>) পেলেও আপনার সর্বোচ্চ মার্ক্স হবে <strong>${maxPossible.toFixed(1)}</strong>। 
+                    দয়া করে ড্রপডাউন থেকে অন্য গ্রেড সিলেক্ট করে আপনার টার্গেট অ্যাডজাস্ট করুন।
+                `;
+                return;
+            }
+
+            // Case 3: Need full marks in all remaining fields
+            if (needed === remainingAvailable && remainingAvailable > 0) {
+                targetStatusBoxEl.className = "p-4 rounded-xl border bg-orange-50 dark:bg-orange-950/40 border-orange-300 dark:border-orange-800 text-orange-900 dark:text-orange-200 text-sm leading-relaxed";
+                targetStatusTextEl.innerHTML = `
+                    <span class="font-bold block text-base mb-1">⚡ অবশিষ্ট মার্ক্সের ১০০% অর্জন করতে হবে</span>
+                    ${targetObj.grade} (${targetObj.remark}) পেতে হলে বাকি <strong>${remainingAvailable}</strong> মার্ক্সের পুরোটাই পেতে হবে।
+                `;
+                return;
+            }
+
+            // Case 4: Target reachable with breakdown
+            if (remainingAvailable > 0) {
+                targetStatusBoxEl.className = "p-4 rounded-xl border bg-indigo-50 dark:bg-indigo-950/40 border-indigo-300 dark:border-indigo-800 text-indigo-900 dark:text-indigo-200 text-sm leading-relaxed";
+
+                let breakdownHTML = '';
+                const onlyFinalLeft = unenteredFields.length === 1 && unenteredFields[0].id === 'final';
+                
+                if (onlyFinalLeft) {
+                    breakdownHTML = `ফাইনাল পরীক্ষায় <strong>৪০ এর মধ্যে অন্তত ${needed.toFixed(1)}</strong> তুলতে হবে।`;
+                } else {
+                    const reqPercentage = ((needed / remainingAvailable) * 100).toFixed(0);
+                    breakdownHTML = `অবশিষ্ট <strong>${remainingAvailable}</strong> মার্ক্সের মধ্যে অন্তত <strong>${needed.toFixed(1)}</strong> তুলতে হবে (বাকি মার্ক্সের <strong>${reqPercentage}%</strong>)।`;
+                }
+
+                targetStatusTextEl.innerHTML = `
+                    <span class="font-bold block text-base mb-1">🎯 ${targetObj.grade} (${targetObj.remark}) পাওয়ার উপায়:</span>
+                    ${targetObj.grade} (GPA ${targetObj.gpa}) অর্জন করতে বাকি পরীক্ষাগুলোতে আপনাকে আরও <strong>${needed.toFixed(1)} মার্ক্স</strong> পেতে হবে। <br>
+                    <span class="mt-1 font-semibold block text-xs text-indigo-800 dark:text-indigo-200">
+                        👉 ${breakdownHTML}
+                    </span>
+                `;
+                return;
+            }
+
+            // Case 5: All fields entered but target missed
+            const finalGrade = getGradeInfo(obtained);
+            targetStatusBoxEl.className = "p-4 rounded-xl border bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-sm leading-relaxed";
+            targetStatusTextEl.innerHTML = `
+                সব মার্ক্স এন্ট্রি করা হয়েছে। আপনার অর্জিত মোট মার্ক্স <strong>${obtained.toFixed(1)}</strong>, যা <strong>${finalGrade.grade} (${finalGrade.remark} - GPA ${finalGrade.cgpa})</strong> গ্রেডের অন্তর্ভুক্ত।
+            `;
+        }
+
+        // --- MULTI-COURSE CGPA CALCULATOR SCRIPT ---
+        const courseRowsContainer = document.getElementById('course-rows-container');
+        const addCourseBtn = document.getElementById('add-course-btn');
+
+        const semGpaValEl = document.getElementById('semester-gpa-val');
+        const semTotalCreditsEl = document.getElementById('sem-total-credits');
+        const semTotalPointsEl = document.getElementById('sem-total-points');
+        const cgpaTotalValEl = document.getElementById('cgpa-total-val');
+        const cumTotalCreditsEl = document.getElementById('cum-total-credits');
+        const prevCreditsInput = document.getElementById('prev-credits');
+        const prevCgpaInput = document.getElementById('prev-cgpa');
+
+        let courseCount = 0;
+
+        function calculateCGPA() {
+            let totalSemCredits = 0;
+            let totalSemPoints = 0;
+
+            const rows = courseRowsContainer ? courseRowsContainer.children : [];
+            for (let row of rows) {
+                const creditSelect = row.querySelector('.course-credit-select');
+                const gradeSelect = row.querySelector('.course-grade-select');
+
+                if (creditSelect && gradeSelect) {
+                    const credit = parseFloat(creditSelect.value) || 0;
+                    const gradePoint = parseFloat(gradeSelect.value) || 0;
+
+                    totalSemCredits += credit;
+                    totalSemPoints += (credit * gradePoint);
+                }
+            }
+
+            const semGPA = totalSemCredits > 0 ? (totalSemPoints / totalSemCredits) : 0;
+
+            // Cumulative calculation
+            const prevCredits = parseFloat(prevCreditsInput ? prevCreditsInput.value : 0) || 0;
+            const prevCGPA = parseFloat(prevCgpaInput ? prevCgpaInput.value : 0) || 0;
+
+            const totalOverallCredits = totalSemCredits + prevCredits;
+            const totalOverallPoints = totalSemPoints + (prevCredits * prevCGPA);
+            const overallCGPA = totalOverallCredits > 0 ? (totalOverallPoints / totalOverallCredits) : semGPA;
+
+            // Render Semester GPA
+            if (semGpaValEl) semGpaValEl.textContent = semGPA.toFixed(2);
+            if (semTotalCreditsEl) semTotalCreditsEl.textContent = totalSemCredits.toFixed(1);
+            if (semTotalPointsEl) semTotalPointsEl.textContent = totalSemPoints.toFixed(2);
+
+            // Render Cumulative CGPA
+            if (cgpaTotalValEl) cgpaTotalValEl.textContent = overallCGPA.toFixed(2);
+            if (cumTotalCreditsEl) cumTotalCreditsEl.textContent = totalOverallCredits.toFixed(1);
+        }
+
+        if (prevCreditsInput) prevCreditsInput.addEventListener('input', calculateCGPA);
+        if (prevCgpaInput) prevCgpaInput.addEventListener('input', calculateCGPA);
+
+        function addCourseRow(title = '', credit = 3.0, gradePoint = 4.00) {
+            courseCount++;
+            const rowId = `course-row-${courseCount}`;
+            const rowDiv = document.createElement('div');
+            rowDiv.id = rowId;
+            rowDiv.className = "p-3 bg-slate-100/70 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/80 transition flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5";
+
+            rowDiv.innerHTML = `
+                <div class="flex-1">
+                    <input type="text" placeholder="কোর্সের নাম/কোড (e.g. CSE111)" value="${title}"
+                        class="course-name-input w-full px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-xs font-medium outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="w-full sm:w-28">
+                    <select class="course-credit-select w-full px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-xs font-semibold outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="3.0" ${credit === 3.0 ? 'selected' : ''}>3.0 Cr</option>
+                        <option value="1.5" ${credit === 1.5 ? 'selected' : ''}>1.5 Cr</option>
+                        <option value="4.0" ${credit === 4.0 ? 'selected' : ''}>4.0 Cr</option>
+                        <option value="2.0" ${credit === 2.0 ? 'selected' : ''}>2.0 Cr</option>
+                        <option value="1.0" ${credit === 1.0 ? 'selected' : ''}>1.0 Cr</option>
+                    </select>
+                </div>
+                <div class="w-full sm:w-36">
+                    <select class="course-grade-select w-full px-2 py-1.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-xs font-bold outline-none focus:ring-2 focus:ring-indigo-500 text-indigo-600 dark:text-indigo-400">
+                        <option value="4.00" ${gradePoint === 4.00 ? 'selected' : ''}>A+ (4.00)</option>
+                        <option value="3.75" ${gradePoint === 3.75 ? 'selected' : ''}>A (3.75)</option>
+                        <option value="3.50" ${gradePoint === 3.50 ? 'selected' : ''}>A- (3.50)</option>
+                        <option value="3.25" ${gradePoint === 3.25 ? 'selected' : ''}>B+ (3.25)</option>
+                        <option value="3.00" ${gradePoint === 3.00 ? 'selected' : ''}>B (3.00)</option>
+                        <option value="2.75" ${gradePoint === 2.75 ? 'selected' : ''}>B- (2.75)</option>
+                        <option value="2.50" ${gradePoint === 2.50 ? 'selected' : ''}>C+ (2.50)</option>
+                        <option value="2.25" ${gradePoint === 2.25 ? 'selected' : ''}>C (2.25)</option>
+                        <option value="2.00" ${gradePoint === 2.00 ? 'selected' : ''}>D (2.00)</option>
+                        <option value="0.00" ${gradePoint === 0.00 ? 'selected' : ''}>F (0.00)</option>
+                    </select>
+                </div>
+                <button type="button" onclick="removeCourseRow('${rowId}')" class="p-1.5 text-slate-400 hover:text-red-500 transition rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+            `;
+
+            courseRowsContainer.appendChild(rowDiv);
+            lucide.createIcons();
+
+            // Add event listeners to calculate CGPA
+            rowDiv.querySelectorAll('select').forEach(element => {
+                element.addEventListener('change', calculateCGPA);
+            });
+
+            calculateCGPA();
+        }
+
+        window.removeCourseRow = function(id) {
+            const row = document.getElementById(id);
+            if (row) {
+                row.remove();
+                calculateCGPA();
+            }
+        };
+
+        // Initialize with default 4 courses
+        addCourseRow('Course 1', 3.0, 4.00);
+        addCourseRow('Course 2', 3.0, 4.00);
+        addCourseRow('Course 3', 3.0, 3.75);
+        addCourseRow('Course 4 (Lab)', 1.5, 4.00);
+
+        if (addCourseBtn) addCourseBtn.addEventListener('click', () => addCourseRow());
+
+        // Listeners
+        if (form) form.addEventListener('input', calculate);
+        if (targetGradeSelect) targetGradeSelect.addEventListener('change', calculate);
+
+        // Reset functionality
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                if (form) form.reset();
+                if (targetGradeSelect) targetGradeSelect.value = "80";
+                calculate();
+                calculateCGPA();
+            });
+        }
+
+        // Initial Calculation
+        calculate();
+    </script>
+</body>
+</html>
